@@ -1100,7 +1100,7 @@ class TutorialSystem {
         });
 
         document.getElementById('start-practice').addEventListener('click', () => {
-            window.location.href = 'index.html';
+            window.location.href = './index.html';
         });
     }
 
