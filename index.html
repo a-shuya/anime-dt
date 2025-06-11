@@ -104,6 +104,7 @@
         
         <div class="visualization">
             <div class="canvas-container">
+                <div id="loading-status" class="loading-status">Python環境を初期化中...</div>
                 <canvas id="tree-canvas"></canvas>
             </div>
         </div>
@@ -177,6 +178,8 @@
         </div>
     </div>
 
+    <!-- Pyodide for Python in browser -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <script src="./datasets.js"></script>
     <script src="./decision-tree.js"></script>
 </body>

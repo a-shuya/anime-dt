@@ -467,6 +467,29 @@ button.danger:hover {
     cursor: grabbing;
 }
 
+.loading-status {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(102, 126, 234, 0.9);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    z-index: 10;
+    display: block;
+}
+
+.loading-status.hidden {
+    display: none;
+}
+
+.python-indicator {
+    text-align: center;
+    margin-top: 10px;
+    color: #666;
+}
+
 .dataset-info {
     margin-top: 25px;
     padding: 20px;

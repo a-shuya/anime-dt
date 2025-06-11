@@ -8,6 +8,8 @@ class DecisionTreeVisualizer {
         this.tree = null;
         this.prunedTree = null;
         this.currentMode = 'beginner';
+        this.pyodide = null;
+        this.pythonReady = false;
         this.animationState = {
             currentStep: 0,
             isAnimating: false,
@@ -20,11 +22,55 @@ class DecisionTreeVisualizer {
         this.minNodeSpacing = 100;
         this.canvasWidth = 1500;
         this.canvasHeight = 1200;
-        this.setupCanvas();
-        this.setupEventListeners();
-        this.setupTooltips();
-        this.setupModeSystem();
-        this.generateNewDataset();
+        
+        this.initializePython().then(() => {
+            this.setupCanvas();
+            this.setupEventListeners();
+            this.setupTooltips();
+            this.setupModeSystem();
+            this.generateNewDataset();
+        });
+    }
+
+    async initializePython() {
+        try {
+            // Pyodideの初期化
+            console.log('Pyodideを初期化中...');
+            this.pyodide = await loadPyodide();
+            
+            // NumPyをインストール
+            await this.pyodide.loadPackage("numpy");
+            
+            // Python決定木モジュールを読み込み
+            const response = await fetch('./decision_tree_python.py');
+            const pythonCode = await response.text();
+            this.pyodide.runPython(pythonCode);
+            
+            this.pythonReady = true;
+            console.log('Python環境の準備完了');
+            
+            // ロード状況を表示
+            this.updateLoadingStatus('Python環境の準備完了');
+        } catch (error) {
+            console.error('Python初期化エラー:', error);
+            this.pythonReady = false;
+            this.updateLoadingStatus('Python初期化エラー - JavaScript版を使用');
+        }
+    }
+
+    updateLoadingStatus(message) {
+        // ローディング状況をUIに表示
+        const statusElement = document.getElementById('loading-status');
+        if (statusElement) {
+            statusElement.textContent = message;
+            
+            // Python準備完了時はステータスを隠す
+            if (message.includes('準備完了') || message.includes('JavaScript版を使用')) {
+                setTimeout(() => {
+                    statusElement.classList.add('hidden');
+                }, 2000);
+            }
+        }
     }
 
     setupCanvas() {
@@ -482,7 +528,53 @@ class DecisionTreeVisualizer {
         return bestSplit;
     }
 
-    buildTree(data, labels, depth = 0, nodeId = 'root') {
+    async buildTree(data, labels, depth = 0, nodeId = 'root') {
+        if (this.pythonReady && this.pyodide) {
+            return await this.buildTreePython(data, labels);
+        } else {
+            // フォールバック: JavaScript版
+            return this.buildTreeJavaScript(data, labels, depth, nodeId);
+        }
+    }
+
+    async buildTreePython(data, labels) {
+        try {
+            const params = {
+                max_depth: parseInt(document.getElementById('max-depth').value),
+                min_samples_split: parseInt(document.getElementById('min-samples-split').value),
+                min_samples_leaf: parseInt(document.getElementById('min-samples-leaf').value),
+                min_impurity_decrease: parseFloat(document.getElementById('min-impurity-decrease').value),
+                ccp_alpha: 0.0,
+                feature_names: this.dataset?.featureNames || ['X0', 'X1'],
+                class_names: this.dataset?.classNames || ['Class 0', 'Class 1']
+            };
+
+            // PythonにデータとパラメータをJavaScriptオブジェクトとして渡す
+            this.pyodide.globals.set("X_data", data);
+            this.pyodide.globals.set("y_data", labels);
+            this.pyodide.globals.set("params", params);
+
+            // Python関数を実行
+            const result = this.pyodide.runPython(`
+                import json
+                result = build_decision_tree(X_data, y_data, params)
+                json.dumps(result)
+            `);
+
+            const parsedResult = JSON.parse(result);
+            
+            // メトリクスを保存
+            this.currentMetrics = parsedResult.metrics;
+            
+            return parsedResult.tree;
+        } catch (error) {
+            console.error('Python決定木構築エラー:', error);
+            // フォールバック: JavaScript版
+            return this.buildTreeJavaScript(data, labels);
+        }
+    }
+
+    buildTreeJavaScript(data, labels, depth = 0, nodeId = 'root') {
         const maxDepth = parseInt(document.getElementById('max-depth').value);
         const minSamplesSplit = parseInt(document.getElementById('min-samples-split').value);
         const minSamplesLeaf = parseInt(document.getElementById('min-samples-leaf').value);
@@ -519,8 +611,8 @@ class DecisionTreeVisualizer {
         const rightData = split.rightIndices.map(idx => data[idx]);
         const rightLabels = split.rightIndices.map(idx => labels[idx]);
 
-        node.left = this.buildTree(leftData, leftLabels, depth + 1, nodeId + 'L');
-        node.right = this.buildTree(rightData, rightLabels, depth + 1, nodeId + 'R');
+        node.left = this.buildTreeJavaScript(leftData, leftLabels, depth + 1, nodeId + 'L');
+        node.right = this.buildTreeJavaScript(rightData, rightLabels, depth + 1, nodeId + 'R');
 
         return node;
     }
@@ -1140,8 +1232,8 @@ function resetAnimation() {
     visualizer.resetAnimation();
 }
 
-function applyPruning() {
-    visualizer.applyPruning();
+async function applyPruning() {
+    await visualizer.applyPruning();
 }
 
 // 初期化
