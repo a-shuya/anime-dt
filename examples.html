@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決定木の実世界応用例</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="main-nav">
+            <div class="nav-title">🌳 決定木学習システム</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">実験モード</a>
+                <a href="tutorial.html" class="nav-link">チュートリアル</a>
+                <a href="examples.html" class="nav-link active">応用例</a>
+            </div>
+        </nav>
+
+        <div class="examples-container">
+            <h1>🌍 決定木の実世界応用例</h1>
+            <p class="intro-text">
+                決定木アルゴリズムは、その解釈しやすさと実用性から、様々な業界で活用されています。
+                ここでは具体的な応用例とその特徴を紹介します。
+            </p>
+
+            <!-- 業界別応用例 -->
+            <div class="industries-section">
+                <h2>🏢 業界別応用例</h2>
+                <div class="industries-grid">
+                    <div class="industry-card medical">
+                        <div class="industry-header">
+                            <div class="industry-icon">🏥</div>
+                            <h3>医療・ヘルスケア</h3>
+                        </div>
+                        <div class="industry-content">
+                            <div class="use-case">
+                                <h4>🩺 疾患診断支援システム</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>入力特徴量：</strong>
+                                        <ul>
+                                            <li>症状（発熱、咳、頭痛など）</li>
+                                            <li>検査値（血圧、血糖値など）</li>
+                                            <li>患者情報（年齢、性別、既往歴）</li>
+                                        </ul>
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 疾患の可能性、推奨検査
+                                    </div>
+                                    <div class="benefits">
+                                        <strong>メリット：</strong>
+                                        <ul>
+                                            <li>医師が判断根拠を理解しやすい</li>
+                                            <li>診断ガイドライン作成に活用</li>
+                                            <li>研修医の教育ツールとして有効</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="example-tree">
+                                    <div class="tree-visualization">
+                                        <div class="node root">
+                                            <div class="condition">発熱 ≥ 38°C？</div>
+                                            <div class="children">
+                                                <div class="branch left">
+                                                    <div class="answer">Yes</div>
+                                                    <div class="node">
+                                                        <div class="condition">咳あり？</div>
+                                                        <div class="children">
+                                                            <div class="leaf">風邪の可能性高</div>
+                                                            <div class="leaf">インフルエンザ疑い</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="branch right">
+                                                    <div class="answer">No</div>
+                                                    <div class="leaf">他の原因を調査</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>💊 薬物治療効果予測</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 遺伝子型、年齢、体重、併用薬
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 治療効果の予測、副作用リスク
+                                    </div>
+                                    <div class="real-world-impact">
+                                        <strong>実際の成果：</strong> 個別化医療の実現、治療成功率向上
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industry-card finance">
+                        <div class="industry-header">
+                            <div class="industry-icon">💰</div>
+                            <h3>金融・保険</h3>
+                        </div>
+                        <div class="industry-content">
+                            <div class="use-case">
+                                <h4>🏦 信用リスク評価</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>入力特徴量：</strong>
+                                        <ul>
+                                            <li>収入・雇用状況</li>
+                                            <li>信用履歴・借入状況</li>
+                                            <li>資産・負債情報</li>
+                                            <li>デモグラフィック情報</li>
+                                        </ul>
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 貸付承認/否認、金利設定
+                                    </div>
+                                    <div class="benefits">
+                                        <strong>業界での価値：</strong>
+                                        <ul>
+                                            <li>規制当局への説明責任</li>
+                                            <li>審査基準の透明性確保</li>
+                                            <li>リスク管理の標準化</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="risk-assessment-demo">
+                                    <h5>リスク評価フロー例</h5>
+                                    <div class="assessment-flow">
+                                        <div class="flow-step">
+                                            <div class="step-icon">💼</div>
+                                            <div class="step-content">
+                                                <div class="step-condition">年収 ≥ 500万円？</div>
+                                                <div class="step-branches">
+                                                    <div class="branch-yes">Yes → 次の条件へ</div>
+                                                    <div class="branch-no">No → 高リスク</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flow-step">
+                                            <div class="step-icon">📊</div>
+                                            <div class="step-content">
+                                                <div class="step-condition">信用スコア ≥ 700？</div>
+                                                <div class="step-branches">
+                                                    <div class="branch-yes">Yes → 低リスク</div>
+                                                    <div class="branch-no">No → 中リスク</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>🔍 不正取引検出</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 取引金額、時間、場所、頻度パターン
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 不正取引の可能性、アラート
+                                    </div>
+                                    <div class="metrics">
+                                        <strong>重要指標：</strong> 再現率（不正を見逃さない）
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>📈 保険商品推薦</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 顧客属性、ライフステージ、既存契約
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 推奨保険商品、最適な保険料
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industry-card retail">
+                        <div class="industry-header">
+                            <div class="industry-icon">🛍️</div>
+                            <h3>小売・マーケティング</h3>
+                        </div>
+                        <div class="industry-content">
+                            <div class="use-case">
+                                <h4>🎯 顧客セグメンテーション</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>入力特徴量：</strong>
+                                        <ul>
+                                            <li>購買履歴（金額、頻度、商品カテゴリ）</li>
+                                            <li>デモグラフィック情報</li>
+                                            <li>ウェブサイト行動データ</li>
+                                            <li>季節性・時間帯パターン</li>
+                                        </ul>
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 顧客セグメント、マーケティング戦略
+                                    </div>
+                                    <div class="benefits">
+                                        <strong>ビジネス価値：</strong>
+                                        <ul>
+                                            <li>パーソナライズされた商品推薦</li>
+                                            <li>効果的な広告ターゲティング</li>
+                                            <li>顧客離反防止策の立案</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="segmentation-example">
+                                    <h5>顧客セグメント分類例</h5>
+                                    <div class="segment-tree">
+                                        <div class="segment-node">
+                                            <div class="condition">月間購買額 ≥ 5万円？</div>
+                                            <div class="segment-children">
+                                                <div class="segment high-value">
+                                                    <div class="segment-label">Yes: 高価値顧客</div>
+                                                    <div class="segment-strategy">→ プレミアム商品推薦</div>
+                                                </div>
+                                                <div class="segment regular">
+                                                    <div class="condition">購買頻度 ≥ 月2回？</div>
+                                                    <div class="segment-children">
+                                                        <div class="segment-label">Yes: 常連客</div>
+                                                        <div class="segment-label">No: 新規・休眠客</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>📦 在庫最適化</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 季節、天候、イベント、過去の売上
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 需要予測、発注量推奨
+                                    </div>
+                                    <div class="impact">
+                                        <strong>効果：</strong> 在庫コスト削減、機会損失防止
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industry-card manufacturing">
+                        <div class="industry-header">
+                            <div class="industry-icon">🏭</div>
+                            <h3>製造業</h3>
+                        </div>
+                        <div class="industry-content">
+                            <div class="use-case">
+                                <h4>🔧 品質管理・不良品検出</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>入力特徴量：</strong>
+                                        <ul>
+                                            <li>製造パラメータ（温度、圧力、速度）</li>
+                                            <li>原材料の品質データ</li>
+                                            <li>機械の稼働状況</li>
+                                            <li>作業者のスキルレベル</li>
+                                        </ul>
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 良品/不良品判定、品質予測
+                                    </div>
+                                    <div class="benefits">
+                                        <strong>製造業での価値：</strong>
+                                        <ul>
+                                            <li>作業者が理解しやすい判定基準</li>
+                                            <li>製造プロセス改善の指針</li>
+                                            <li>品質管理システムの標準化</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="quality-control-flow">
+                                    <h5>品質判定フロー例</h5>
+                                    <div class="qc-steps">
+                                        <div class="qc-step">
+                                            <div class="step-number">1</div>
+                                            <div class="step-content">
+                                                <div class="condition">温度 180-200°C？</div>
+                                                <div class="action">→ 次工程へ / 温度調整</div>
+                                            </div>
+                                        </div>
+                                        <div class="qc-step">
+                                            <div class="step-number">2</div>
+                                            <div class="step-content">
+                                                <div class="condition">圧力 2.0-2.5MPa？</div>
+                                                <div class="action">→ 合格 / 再加工</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>⚙️ 予知保全</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 振動、温度、電流値、稼働時間
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 故障予測、メンテナンス時期
+                                    </div>
+                                    <div class="roi">
+                                        <strong>ROI：</strong> ダウンタイム削減、メンテナンスコスト最適化
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="industry-card hr">
+                        <div class="industry-header">
+                            <div class="industry-icon">👥</div>
+                            <h3>人事・人材管理</h3>
+                        </div>
+                        <div class="industry-content">
+                            <div class="use-case">
+                                <h4>📝 採用スクリーニング</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>入力特徴量：</strong>
+                                        <ul>
+                                            <li>学歴・職歴</li>
+                                            <li>スキル・資格</li>
+                                            <li>適性テスト結果</li>
+                                            <li>面接評価</li>
+                                        </ul>
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 採用推奨度、配属部署提案
+                                    </div>
+                                    <div class="considerations">
+                                        <strong>倫理的考慮：</strong>
+                                        <ul>
+                                            <li>バイアス除去の重要性</li>
+                                            <li>公平性・透明性の確保</li>
+                                            <li>人間の最終判断の重要性</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="use-case">
+                                <h4>📊 離職予測</h4>
+                                <div class="case-details">
+                                    <div class="features">
+                                        <strong>特徴量：</strong> 勤続年数、評価、給与、部署
+                                    </div>
+                                    <div class="output">
+                                        <strong>出力：</strong> 離職リスク、retention施策
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 決定木の選択理由 -->
+            <div class="why-decision-trees">
+                <h2>🤔 なぜ決定木が選ばれるのか？</h2>
+                <div class="reasons-grid">
+                    <div class="reason-card">
+                        <div class="reason-icon">👁️</div>
+                        <h3>解釈しやすさ</h3>
+                        <p>判断過程が視覚的に理解でき、ステークホルダーへの説明が容易</p>
+                        <div class="example">
+                            <strong>例：</strong> 医師が患者に診断理由を説明できる
+                        </div>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <div class="reason-icon">⚖️</div>
+                        <h3>規制対応</h3>
+                        <p>金融業界などで求められるアルゴリズムの透明性要件を満たす</p>
+                        <div class="example">
+                            <strong>例：</strong> 融資審査の判断根拠を監査機関に提示
+                        </div>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <div class="reason-icon">🔄</div>
+                        <h3>業務統合の容易さ</h3>
+                        <p>既存の業務フローや判断基準に組み込みやすい</p>
+                        <div class="example">
+                            <strong>例：</strong> 製造現場の品質管理マニュアルとの整合
+                        </div>
+                    </div>
+                    
+                    <div class="reason-card">
+                        <div class="reason-icon">🎓</div>
+                        <h3>教育・研修効果</h3>
+                        <p>新人教育や業務標準化のツールとして活用可能</p>
+                        <div class="example">
+                            <strong>例：</strong> 医学生の診断学習、営業マンの顧客対応
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成功事例詳細 -->
+            <div class="success-stories">
+                <h2>🏆 詳細成功事例</h2>
+                
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">🏥</div>
+                        <h3>ケース1: 某大学病院での診断支援システム</h3>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-challenge">
+                            <h4>課題</h4>
+                            <p>研修医の診断精度向上と、ベテラン医師の知識継承</p>
+                        </div>
+                        <div class="story-solution">
+                            <h4>ソリューション</h4>
+                            <ul>
+                                <li>過去の診断データから決定木モデルを構築</li>
+                                <li>症状-診断のパターンを可視化</li>
+                                <li>診断の判断根拠を明確化</li>
+                            </ul>
+                        </div>
+                        <div class="story-results">
+                            <h4>結果</h4>
+                            <div class="results-metrics">
+                                <div class="metric">
+                                    <div class="metric-value">25%</div>
+                                    <div class="metric-label">診断精度向上</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">40%</div>
+                                    <div class="metric-label">研修時間短縮</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">90%</div>
+                                    <div class="metric-label">医師満足度</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <div class="story-header">
+                        <div class="story-icon">🏦</div>
+                        <h3>ケース2: 地方銀行での中小企業向け融資審査</h3>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-challenge">
+                            <h4>課題</h4>
+                            <p>審査時間の短縮と貸倒れリスクの低減の両立</p>
+                        </div>
+                        <div class="story-solution">
+                            <h4>ソリューション</h4>
+                            <ul>
+                                <li>財務データと事業内容から決定木を構築</li>
+                                <li>審査官の経験知をルール化</li>
+                                <li>規制当局への説明資料として活用</li>
+                            </ul>
+                        </div>
+                        <div class="story-results">
+                            <h4>結果</h4>
+                            <div class="results-metrics">
+                                <div class="metric">
+                                    <div class="metric-value">60%</div>
+                                    <div class="metric-label">審査時間短縮</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">15%</div>
+                                    <div class="metric-label">貸倒れ率減少</div>
+                                </div>
+                                <div class="metric">
+                                    <div class="metric-value">85%</div>
+                                    <div class="metric-label">中小企業満足度</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 実装時の考慮事項 -->
+            <div class="implementation-considerations">
+                <h2>⚠️ 実装時の重要な考慮事項</h2>
+                
+                <div class="considerations-grid">
+                    <div class="consideration-card data">
+                        <h3>📊 データ品質</h3>
+                        <div class="consideration-points">
+                            <div class="point">
+                                <strong>必要十分なデータ量：</strong>
+                                信頼性のあるモデル構築には適切なサンプル数が必要
+                            </div>
+                            <div class="point">
+                                <strong>代表性の確保：</strong>
+                                学習データが実運用環境を適切に反映しているか確認
+                            </div>
+                            <div class="point">
+                                <strong>バイアスの除去：</strong>
+                                特定のグループに偏ったデータでないか検証
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="consideration-card ethics">
+                        <h3>🤝 倫理・公平性</h3>
+                        <div class="consideration-points">
+                            <div class="point">
+                                <strong>差別的判断の排除：</strong>
+                                性別、人種、年齢による不当な判断を防ぐ
+                            </div>
+                            <div class="point">
+                                <strong>透明性の確保：</strong>
+                                判断基準を関係者に適切に開示
+                            </div>
+                            <div class="point">
+                                <strong>人間の最終判断：</strong>
+                                重要な決定には必ず人間の介入を組み込む
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="consideration-card maintenance">
+                        <h3>🔄 継続的改善</h3>
+                        <div class="consideration-points">
+                            <div class="point">
+                                <strong>性能モニタリング：</strong>
+                                定期的な精度評価と性能劣化の検出
+                            </div>
+                            <div class="point">
+                                <strong>モデル更新：</strong>
+                                新しいデータでの再学習とバージョン管理
+                            </div>
+                            <div class="point">
+                                <strong>フィードバック収集：</strong>
+                                利用者からの意見を改善に活用
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="consideration-card integration">
+                        <h3>🔗 システム統合</h3>
+                        <div class="consideration-points">
+                            <div class="point">
+                                <strong>既存システムとの連携：</strong>
+                                データフローと業務プロセスの整合性確保
+                            </div>
+                            <div class="point">
+                                <strong>ユーザビリティ：</strong>
+                                現場の担当者が使いやすいインターフェース設計
+                            </div>
+                            <div class="point">
+                                <strong>セキュリティ：</strong>
+                                データ保護と不正アクセス防止対策
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 次のステップ -->
+            <div class="next-steps">
+                <h2>🚀 あなたの次のステップ</h2>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h3>基礎理解の深化</h3>
+                            <p>チュートリアルで基本概念をしっかり学習</p>
+                            <a href="tutorial.html" class="step-link">チュートリアルを始める</a>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h3>実験による理解</h3>
+                            <p>様々なパラメータで実際に決定木を構築</p>
+                            <a href="index.html" class="step-link">実験モードで試す</a>
+                        </div>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h3>実データでの実践</h3>
+                            <p>業務データを使った実際のモデル構築</p>
+                            <div class="step-tools">
+                                <span>推奨ツール: Python scikit-learn, R</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

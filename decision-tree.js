@@ -7,6 +7,7 @@ class DecisionTreeVisualizer {
         this.dataset = null;
         this.tree = null;
         this.prunedTree = null;
+        this.currentMode = 'beginner';
         this.animationState = {
             currentStep: 0,
             isAnimating: false,
@@ -17,11 +18,12 @@ class DecisionTreeVisualizer {
         this.nodeRadius = 35;
         this.levelHeight = 120;
         this.minNodeSpacing = 100;
-        this.canvasWidth = 1500;  // 拡張されたキャンバス幅
-        this.canvasHeight = 1200; // 拡張されたキャンバス高さ
+        this.canvasWidth = 1500;
+        this.canvasHeight = 1200;
         this.setupCanvas();
         this.setupEventListeners();
         this.setupTooltips();
+        this.setupModeSystem();
         this.generateNewDataset();
     }
 
@@ -66,6 +68,302 @@ class DecisionTreeVisualizer {
         }
 
         window.addEventListener('resize', () => this.setupCanvas());
+    }
+
+    setupModeSystem() {
+        // モード切替ボタンの設定
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const mode = e.currentTarget.dataset.mode;
+                this.switchMode(mode);
+            });
+        });
+
+        // 初期モード設定
+        this.switchMode('beginner');
+    }
+
+    switchMode(mode) {
+        this.currentMode = mode;
+        
+        // モードボタンの状態更新
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.mode === mode) {
+                btn.classList.add('active');
+            }
+        });
+
+        // モード別UIの表示/非表示
+        this.updateModeVisibility();
+        this.updateGuideContent();
+        this.updateMetricsExplanation();
+    }
+
+    updateModeVisibility() {
+        const formulaSection = document.getElementById('formula-section');
+        const metricsExplanation = document.getElementById('metrics-explanation');
+        
+        switch(this.currentMode) {
+            case 'beginner':
+                if (formulaSection) formulaSection.style.display = 'none';
+                if (metricsExplanation) metricsExplanation.style.display = 'block';
+                this.showSimplifiedControls();
+                break;
+            case 'intermediate':
+                if (formulaSection) formulaSection.style.display = 'none';
+                if (metricsExplanation) metricsExplanation.style.display = 'block';
+                this.showAllControls();
+                break;
+            case 'advanced':
+                if (formulaSection) formulaSection.style.display = 'block';
+                if (metricsExplanation) metricsExplanation.style.display = 'block';
+                this.showAllControls();
+                break;
+        }
+    }
+
+    showSimplifiedControls() {
+        // 初心者モードでは基本的なコントロールのみ表示
+        const advancedControls = ['min-impurity-decrease', 'ccp-alpha'];
+        advancedControls.forEach(id => {
+            const control = document.getElementById(id)?.closest('.control-group');
+            if (control) control.style.display = 'none';
+        });
+    }
+
+    showAllControls() {
+        // 全てのコントロールを表示
+        document.querySelectorAll('.control-group').forEach(group => {
+            group.style.display = 'flex';
+        });
+    }
+
+    updateGuideContent() {
+        const guideContent = document.getElementById('guide-content');
+        if (!guideContent) return;
+
+        const guides = {
+            beginner: `
+                <div class="guide-step">
+                    <div class="guide-step-title">🌱 初心者向けガイド</div>
+                    <div class="guide-step-content">
+                        <p><strong>ステップ1:</strong> まずは「新しいデータセット生成」をクリックしてデータを作成しましょう</p>
+                        <p><strong>ステップ2:</strong> 「アニメーション開始」で決定木の成長過程を観察</p>
+                        <p><strong>ステップ3:</strong> 最大深度を変更して、木の複雑さがどう変わるか確認</p>
+                        <p><strong>💡ヒント:</strong> 深度を深くしすぎると過学習が起こりやすくなります</p>
+                    </div>
+                </div>
+            `,
+            intermediate: `
+                <div class="guide-step">
+                    <div class="guide-step-title">🌿 中級者向けガイド</div>
+                    <div class="guide-step-content">
+                        <p><strong>実験1:</strong> 異なるデータセットで同じパラメータを試して性能を比較</p>
+                        <p><strong>実験2:</strong> min_samples_splitを変更して過学習の影響を観察</p>
+                        <p><strong>実験3:</strong> 剪定パラメータ(ccp_alpha)を調整して最適なバランスを見つける</p>
+                        <p><strong>📊 注目ポイント:</strong> 訓練精度とテスト精度の差に注意</p>
+                    </div>
+                </div>
+            `,
+            advanced: `
+                <div class="guide-step">
+                    <div class="guide-step-title">🌳 上級者向けガイド</div>
+                    <div class="guide-step-content">
+                        <p><strong>アルゴリズム理解:</strong> 下部のGini係数計算過程を確認しながら実験</p>
+                        <p><strong>パラメータ最適化:</strong> グリッドサーチ的にパラメータを系統的に変更</p>
+                        <p><strong>性能分析:</strong> 各評価指標の変化を詳細に分析</p>
+                        <p><strong>🧮 数式理解:</strong> 情報利得とGini係数の関係を数式で確認</p>
+                    </div>
+                </div>
+            `
+        };
+
+        guideContent.innerHTML = guides[this.currentMode];
+    }
+
+    updateMetricsExplanation() {
+        const metricsExplanation = document.getElementById('metrics-explanation');
+        if (!metricsExplanation) return;
+
+        const explanations = {
+            beginner: `
+                <div class="metric-explanation">
+                    <div class="metric-name">精度 (Accuracy)</div>
+                    <div class="metric-description">
+                        全体の予測のうち、正しく予測できた割合です。
+                        簡単に言うと「どれだけ当たったか」を表します。
+                    </div>
+                </div>
+                <div class="metric-explanation">
+                    <div class="metric-name">F1スコア</div>
+                    <div class="metric-description">
+                        精度と再現率のバランスを表す指標です。
+                        一般的な分類問題では最も重要な指標の一つです。
+                    </div>
+                </div>
+            `,
+            intermediate: `
+                <div class="metric-explanation">
+                    <div class="metric-name">適合率 (Precision)</div>
+                    <div class="metric-description">
+                        「陽性」と予測したもののうち、実際に陽性だった割合。
+                        偽陽性（間違って陽性と判定）を避けたい場合に重要。
+                    </div>
+                </div>
+                <div class="metric-explanation">
+                    <div class="metric-name">再現率 (Recall)</div>
+                    <div class="metric-description">
+                        実際の陽性のうち、正しく陽性と予測できた割合。
+                        見逃し（偽陰性）を避けたい場合に重要。
+                    </div>
+                </div>
+            `,
+            advanced: `
+                <div class="metric-explanation">
+                    <div class="metric-name">マクロ平均 vs 重み付き平均</div>
+                    <div class="metric-description">
+                        <strong>マクロ平均:</strong> 各クラスの指標を単純平均。クラス間のバランスを重視。<br>
+                        <strong>重み付き平均:</strong> サンプル数で重み付け。全体性能を重視。<br>
+                        不均衡データでは両者に大きな差が生じることがあります。
+                    </div>
+                </div>
+                <div class="metric-explanation">
+                    <div class="metric-name">混同行列の読み方</div>
+                    <div class="metric-description">
+                        TP(真陽性)、TN(真陰性)、FP(偽陽性)、FN(偽陰性)の関係を理解し、
+                        どの種類の誤りが多いかを分析することが重要です。
+                    </div>
+                </div>
+            `
+        };
+
+        metricsExplanation.innerHTML = explanations[this.currentMode];
+    }
+
+    updateFormulaVisualization(parentLabels, bestSplit, allCandidates) {
+        const currentSplitInfo = document.getElementById('current-split-info');
+        const giniCalculation = document.getElementById('gini-calculation');
+        const informationGain = document.getElementById('information-gain');
+
+        if (!currentSplitInfo || !giniCalculation || !informationGain) return;
+
+        // 現在の分割候補情報
+        const featureName = this.dataset && this.dataset.featureNames ? 
+                          this.dataset.featureNames[bestSplit.feature] : `X${bestSplit.feature}`;
+        
+        currentSplitInfo.innerHTML = `
+            <div class="formula-math">
+                ${featureName} ≤ ${bestSplit.threshold.toFixed(3)}
+            </div>
+            <div class="calculation-step">
+                <strong>分割結果:</strong><br>
+                左: ${bestSplit.leftLabels.length} サンプル<br>
+                右: ${bestSplit.rightLabels.length} サンプル
+            </div>
+        `;
+
+        // Gini係数計算の詳細
+        const parentGini = this.calculateGini(parentLabels);
+        const parentCounts = this.getClassCounts(parentLabels);
+        const leftCounts = this.getClassCounts(bestSplit.leftLabels);
+        const rightCounts = this.getClassCounts(bestSplit.rightLabels);
+
+        giniCalculation.innerHTML = `
+            <div class="formula-math">
+                Gini = 1 - Σ(p<sub>i</sub>)<sup>2</sup>
+            </div>
+            <div class="calculation-step">
+                <strong>親ノード:</strong><br>
+                ${this.formatGiniCalculation(parentLabels, parentCounts, parentGini)}
+            </div>
+            <div class="calculation-step">
+                <strong>左の子:</strong><br>
+                ${this.formatGiniCalculation(bestSplit.leftLabels, leftCounts, bestSplit.leftGini)}
+            </div>
+            <div class="calculation-step">
+                <strong>右の子:</strong><br>
+                ${this.formatGiniCalculation(bestSplit.rightLabels, rightCounts, bestSplit.rightGini)}
+            </div>
+        `;
+
+        // 情報利得計算
+        const totalSamples = parentLabels.length;
+        const leftWeight = bestSplit.leftLabels.length / totalSamples;
+        const rightWeight = bestSplit.rightLabels.length / totalSamples;
+        const weightedGini = leftWeight * bestSplit.leftGini + rightWeight * bestSplit.rightGini;
+
+        informationGain.innerHTML = `
+            <div class="formula-math">
+                情報利得 = Gini(親) - [重み付きGini(子)]
+            </div>
+            <div class="calculation-step">
+                <strong>重み付きGini計算:</strong><br>
+                = ${leftWeight.toFixed(3)} × ${bestSplit.leftGini.toFixed(3)} + ${rightWeight.toFixed(3)} × ${bestSplit.rightGini.toFixed(3)}<br>
+                = ${weightedGini.toFixed(3)}
+            </div>
+            <div class="calculation-step">
+                <strong>情報利得:</strong><br>
+                = ${parentGini.toFixed(3)} - ${weightedGini.toFixed(3)}<br>
+                = <strong>${bestSplit.impurityDecrease.toFixed(3)}</strong>
+            </div>
+            <div class="calculation-step">
+                <small>💡 この値が最大となる分割を選択します</small>
+            </div>
+        `;
+
+        // 他の候補との比較（上位3つ）
+        if (allCandidates.length > 1) {
+            const topCandidates = allCandidates
+                .sort((a, b) => b.impurityDecrease - a.impurityDecrease)
+                .slice(0, 3);
+
+            const comparison = topCandidates.map((candidate, index) => {
+                const candidateFeatureName = this.dataset && this.dataset.featureNames ? 
+                                            this.dataset.featureNames[candidate.feature] : `X${candidate.feature}`;
+                const isSelected = candidate === bestSplit;
+                return `
+                    <div class="candidate-comparison ${isSelected ? 'selected' : ''}">
+                        <div class="candidate-rank">${index + 1}</div>
+                        <div class="candidate-info">
+                            ${candidateFeatureName} ≤ ${candidate.threshold.toFixed(3)}
+                        </div>
+                        <div class="candidate-gain">
+                            利得: ${candidate.impurityDecrease.toFixed(3)} ${isSelected ? '✓' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            informationGain.innerHTML += `
+                <div class="calculation-step">
+                    <strong>分割候補比較 (上位3つ):</strong><br>
+                    ${comparison}
+                </div>
+            `;
+        }
+    }
+
+    formatGiniCalculation(labels, counts, gini) {
+        const total = labels.length;
+        if (total === 0) return 'サンプルなし';
+
+        const classProbs = Object.keys(counts).map(cls => {
+            const count = counts[cls];
+            const prob = count / total;
+            return `p<sub>${cls}</sub> = ${count}/${total} = ${prob.toFixed(3)}`;
+        }).join(', ');
+
+        const squaredSum = Object.values(counts).reduce((sum, count) => {
+            const prob = count / total;
+            return sum + prob * prob;
+        }, 0);
+
+        return `
+            ${classProbs}<br>
+            Gini = 1 - (${Object.keys(counts).map(cls => `(${(counts[cls]/total).toFixed(3)})²`).join(' + ')})<br>
+            = 1 - ${squaredSum.toFixed(3)} = <strong>${gini.toFixed(3)}</strong>
+        `;
     }
 
     setupTooltips() {
@@ -122,6 +420,7 @@ class DecisionTreeVisualizer {
 
         let bestSplit = null;
         let bestScore = Infinity;
+        let splitCandidates = [];
 
         for (let feature = 0; feature < data[0].length; feature++) {
             const values = data.map(row => row[feature]).sort((a, b) => a - b);
@@ -151,19 +450,33 @@ class DecisionTreeVisualizer {
                 const leftGini = this.calculateGini(leftLabels);
                 const rightGini = this.calculateGini(rightLabels);
                 const weightedGini = (leftLabels.length * leftGini + rightLabels.length * rightGini) / labels.length;
+                const impurityDecrease = this.calculateGini(labels) - weightedGini;
+
+                const candidate = {
+                    feature,
+                    threshold,
+                    leftIndices,
+                    rightIndices,
+                    gini: weightedGini,
+                    impurityDecrease,
+                    leftGini,
+                    rightGini,
+                    leftLabels,
+                    rightLabels
+                };
+
+                splitCandidates.push(candidate);
 
                 if (weightedGini < bestScore) {
                     bestScore = weightedGini;
-                    bestSplit = {
-                        feature,
-                        threshold,
-                        leftIndices,
-                        rightIndices,
-                        gini: weightedGini,
-                        impurityDecrease: this.calculateGini(labels) - weightedGini
-                    };
+                    bestSplit = candidate;
                 }
             }
+        }
+
+        // 上級者モードの場合、数式可視化を更新
+        if (this.currentMode === 'advanced' && bestSplit) {
+            this.updateFormulaVisualization(labels, bestSplit, splitCandidates);
         }
 
         return bestSplit;

@@ -8,7 +8,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌳 決定木成長過程アニメーション</h1>
+        <nav class="main-nav">
+            <div class="nav-title">🌳 決定木学習システム</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link active">実験モード</a>
+                <a href="tutorial.html" class="nav-link">チュートリアル</a>
+                <a href="examples.html" class="nav-link">応用例</a>
+            </div>
+        </nav>
+        
+        <div class="mode-selector">
+            <h1>🌳 決定木成長過程アニメーション</h1>
+            <div class="learning-modes">
+                <button class="mode-btn active" data-mode="beginner">
+                    <span class="mode-icon">🌱</span>
+                    <span class="mode-title">初心者モード</span>
+                    <span class="mode-desc">基本概念から学習</span>
+                </button>
+                <button class="mode-btn" data-mode="intermediate">
+                    <span class="mode-icon">🌿</span>
+                    <span class="mode-title">中級者モード</span>
+                    <span class="mode-desc">パラメータ実験</span>
+                </button>
+                <button class="mode-btn" data-mode="advanced">
+                    <span class="mode-icon">🌳</span>
+                    <span class="mode-title">上級者モード</span>
+                    <span class="mode-desc">アルゴリズム詳細</span>
+                </button>
+            </div>
+        </div>
         
         <div class="controls">
             <div class="control-group">
@@ -99,6 +127,33 @@
             </div>
         </div>
 
+        <!-- ガイド表示エリア -->
+        <div class="guide-section" id="guide-section">
+            <h3>📚 学習ガイド</h3>
+            <div id="guide-content">
+                <!-- モード別ガイドコンテンツ -->
+            </div>
+        </div>
+
+        <!-- 数式可視化エリア -->
+        <div class="formula-section" id="formula-section" style="display: none;">
+            <h3>🧮 Gini係数計算過程</h3>
+            <div id="formula-visualization">
+                <div class="formula-step">
+                    <div class="formula-title">現在の分割候補</div>
+                    <div class="formula-content" id="current-split-info"></div>
+                </div>
+                <div class="formula-step">
+                    <div class="formula-title">Gini係数計算</div>
+                    <div class="formula-content" id="gini-calculation"></div>
+                </div>
+                <div class="formula-step">
+                    <div class="formula-title">情報利得</div>
+                    <div class="formula-content" id="information-gain"></div>
+                </div>
+            </div>
+        </div>
+
         <div class="algorithm-section">
             <h3>🌲 決定木統計情報</h3>
             <div id="tree-stats">
@@ -110,6 +165,9 @@
             <h3>📊 学習精度指標</h3>
             <div id="metrics-stats">
                 <p>決定木を生成してください</p>
+            </div>
+            <div class="metrics-explanation" id="metrics-explanation" style="display: none;">
+                <!-- モード別の指標説明 -->
             </div>
         </div>
         

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決定木チュートリアル</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="main-nav">
+            <div class="nav-title">🌳 決定木学習システム</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">実験モード</a>
+                <a href="tutorial.html" class="nav-link active">チュートリアル</a>
+                <a href="examples.html" class="nav-link">応用例</a>
+            </div>
+        </nav>
+
+        <div class="tutorial-container">
+            <h1>📚 決定木学習チュートリアル</h1>
+            
+            <!-- チュートリアル進行バー -->
+            <div class="tutorial-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tutorial-progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="current-lesson">1</span> / <span id="total-lessons">8</span> レッスン
+                </div>
+            </div>
+
+            <!-- レッスン選択 -->
+            <div class="lesson-selector">
+                <button class="lesson-btn active" data-lesson="1">
+                    <span class="lesson-number">1</span>
+                    <span class="lesson-title">決定木とは？</span>
+                </button>
+                <button class="lesson-btn" data-lesson="2">
+                    <span class="lesson-number">2</span>
+                    <span class="lesson-title">分類の基本</span>
+                </button>
+                <button class="lesson-btn" data-lesson="3">
+                    <span class="lesson-number">3</span>
+                    <span class="lesson-title">Gini係数</span>
+                </button>
+                <button class="lesson-btn" data-lesson="4">
+                    <span class="lesson-number">4</span>
+                    <span class="lesson-title">分割ルール</span>
+                </button>
+                <button class="lesson-btn" data-lesson="5">
+                    <span class="lesson-number">5</span>
+                    <span class="lesson-title">木の成長</span>
+                </button>
+                <button class="lesson-btn" data-lesson="6">
+                    <span class="lesson-number">6</span>
+                    <span class="lesson-title">過学習と剪定</span>
+                </button>
+                <button class="lesson-btn" data-lesson="7">
+                    <span class="lesson-number">7</span>
+                    <span class="lesson-title">性能評価</span>
+                </button>
+                <button class="lesson-btn" data-lesson="8">
+                    <span class="lesson-number">8</span>
+                    <span class="lesson-title">実践演習</span>
+                </button>
+            </div>
+
+            <!-- レッスンコンテンツ -->
+            <div class="lesson-content" id="lesson-content">
+                <!-- 動的にレッスン内容が表示される -->
+            </div>
+
+            <!-- ナビゲーションボタン -->
+            <div class="tutorial-navigation">
+                <button id="prev-lesson" class="nav-btn" disabled>
+                    ← 前のレッスン
+                </button>
+                <button id="next-lesson" class="nav-btn">
+                    次のレッスン →
+                </button>
+                <button id="start-practice" class="practice-btn" style="display: none;">
+                    実験モードで実践
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tutorial.js"></script>
+</body>
+</html>
