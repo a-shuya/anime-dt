@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>決定木アニメーション可視化</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌳 決定木成長過程アニメーション</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="dataset-type">データセット選択</label>
+                <select id="dataset-type">
+                    <option value="iris">Iris Dataset (3クラス分類)</option>
+                    <option value="wine">Wine Dataset (3クラス分類)</option>
+                    <option value="breast_cancer">Breast Cancer Dataset (2クラス分類)</option>
+                    <option value="synthetic_2d" selected>Synthetic 2D Dataset (2クラス分類)</option>
+                    <option value="synthetic_circles">Synthetic Circles Dataset (2クラス分類)</option>
+                    <option value="synthetic_moons">Synthetic Moons Dataset (2クラス分類)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="dataset-size">データセットサイズ</label>
+                <input type="range" id="dataset-size" min="50" max="500" step="50" value="200">
+                <div class="value-display" id="dataset-size-value">200</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="max-depth">最大深度 (max_depth)</label>
+                <input type="range" id="max-depth" min="1" max="10" value="3">
+                <div class="value-display" id="max-depth-value">3</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="min-samples-split">分割最小サンプル数 (min_samples_split)</label>
+                <input type="range" id="min-samples-split" min="2" max="20" value="2">
+                <div class="value-display" id="min-samples-split-value">2</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="min-samples-leaf">葉の最小サンプル数 (min_samples_leaf)</label>
+                <input type="range" id="min-samples-leaf" min="1" max="10" value="1">
+                <div class="value-display" id="min-samples-leaf-value">1</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="min-impurity-decrease">不純度減少最小値 (min_impurity_decrease)</label>
+                <input type="range" id="min-impurity-decrease" min="0" max="0.1" step="0.001" value="0">
+                <div class="value-display" id="min-impurity-decrease-value">0.000</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="animation-speed">アニメーション速度 (ms)</label>
+                <input type="range" id="animation-speed" min="100" max="2000" step="100" value="800">
+                <div class="value-display" id="animation-speed-value">800ms</div>
+            </div>
+            
+            <div class="control-group">
+                <label for="ccp-alpha">剪定パラメータ (ccp_alpha)</label>
+                <input type="range" id="ccp-alpha" min="0" max="0.1" step="0.001" value="0">
+                <div class="value-display" id="ccp-alpha-value">0.000</div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button onclick="generateNewDataset()" class="secondary">新しいデータセット生成</button>
+            <button onclick="startAnimation()" id="start-btn">アニメーション開始</button>
+            <button onclick="pauseAnimation()" id="pause-btn" disabled>一時停止</button>
+            <button onclick="resetAnimation()" id="reset-btn" class="danger">リセット</button>
+            <button onclick="applyPruning()" id="prune-btn">剪定適用</button>
+        </div>
+        
+        <div class="visualization">
+            <div class="canvas-container">
+                <canvas id="tree-canvas"></canvas>
+            </div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF6B6B;"></div>
+                <span>クラス 0</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #4ECDC4;"></div>
+                <span>クラス 1</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #45B7D1;"></div>
+                <span>クラス 2</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #96CEB4;"></div>
+                <span>内部ノード</span>
+            </div>
+        </div>
+
+        <div class="algorithm-section">
+            <h3>🌲 決定木統計情報</h3>
+            <div id="tree-stats">
+                <p>データセットを生成してください</p>
+            </div>
+        </div>
+
+        <div class="metrics-section">
+            <h3>📊 学習精度指標</h3>
+            <div id="metrics-stats">
+                <p>決定木を生成してください</p>
+            </div>
+        </div>
+        
+        <div class="dataset-info">
+            <h3>📊 データセット情報</h3>
+            <p id="dataset-details">データセットを生成してください</p>
+        </div>
+    </div>
+
+    <script src="datasets.js"></script>
+    <script src="decision-tree.js"></script>
+</body>
+</html>
